@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 [Route("api/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly ECommerceDbContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public ProductController(ECommerceDbContext context)
+    public ProductController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -46,30 +46,19 @@ public class ProductController : ControllerBase
     }
     // PUT: api/Product/{id}
 [HttpPut("{id}")]
-public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
+public async Task<IActionResult> UpdateProduct(int id, Product updatedProduct)
 {
-    if (id != product.Id)
+    var product = await _context.Products.FindAsync(id);
+    if (product == null)
     {
-        return BadRequest();
+        return NotFound();
     }
 
-    _context.Entry(product).State = EntityState.Modified;
+    product.Name = updatedProduct.Name;
+    product.Price = updatedProduct.Price;
+    product.Image = updatedProduct.Image;
 
-    try
-    {
-        await _context.SaveChangesAsync();
-    }
-    catch (DbUpdateConcurrencyException)
-    {
-        if (!ProductExists(id))
-        {
-            return NotFound();
-        }
-        else
-        {
-            throw;
-        }
-    }
+    await _context.SaveChangesAsync();
 
     return NoContent();
 }
@@ -79,7 +68,7 @@ private bool ProductExists(int id)
     return _context.Products.Any(e => e.Id == id);
 }
 
-// DELETE: api/Product/{id}
+
 [HttpDelete("{id}")]
 public async Task<IActionResult> DeleteProduct(int id)
 {

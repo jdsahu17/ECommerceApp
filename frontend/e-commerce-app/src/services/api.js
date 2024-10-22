@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:5001/api'; // Adjust the URL based on your backend
+const API_URL = 'http://localhost:5048/api'; // Adjust the URL based on your backend
 
 // Get all products
 export const getProducts = async () => {
@@ -10,6 +10,11 @@ export const getProducts = async () => {
   } catch (error) {
     console.error("There was an error fetching the products!", error);
   }
+};
+
+export const getProductById = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`);
+  return response.data;
 };
 
 // Add a product

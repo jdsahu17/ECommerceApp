@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-ro
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductList from './components/ProductList';
 import ProductDetails from './components/ProductDetails';
+import AddProduct from './components/AddProduct';
 import Cart from './components/Cart';
+import EditProduct from './components/EditProduct'; // Import EditProduct component
+
 
 const App = () => {
   const [cart, setCart] = useState([]);
@@ -52,6 +55,8 @@ const App = () => {
           <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
           <Route path="/" element={<Navigate to="/products" />} />
           <Route path="/product/:id" element={<ProductDetails products={products} />} />
+          <Route path="/add-product" element={<AddProduct />} />
+          <Route path="/product/edit/:id" element={<EditProduct />} />
         </Routes>
       </div>
     </Router>
